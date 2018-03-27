@@ -1,4 +1,4 @@
-#BDIndexSpider
+# BDIndexSpider
 百度指数抓取工具
 
 NOTE: 本代码写于2016年，目前由于Webdriver驱动的问题，无法直接运行。后面会抽时间修复一下
