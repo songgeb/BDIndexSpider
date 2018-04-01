@@ -86,6 +86,9 @@ public class Model {
 	}
 
 	public String toString() {
+		if (this.startDate == null || this.endDate == null) {
+			return "initialisation not finished!";
+		}
 		return "[keyword =" + keyword + "," + "startDate="
 				+ dateFormat.format(startDate) + "," + "endDate="
 				+ dateFormat.format(endDate) + "," + "time=" + time + ","

@@ -18,11 +18,12 @@ public class BDIndexBy {
 	private static String xpathOfBDIndexNum = "//*[@id='trendPopTab']//*[@class='imgtxt']";
 	private static String xpathOfBDIndexNumStyle = "//*[@id='trendPopTab']/tbody/tr/td[3]/style";
 	
-	private static String xpathOfTimeSelection = "//*[@class='selectA rangeDate']";
-	private static String xpathOfStartYear = "//*[@id='auto_gsid_17']/div[1]/span[2]/span[1]";
-	private static String xpathOfStartMonth = "//*[@id='auto_gsid_17']/div[1]/span[2]/span[2]";
-	private static String xpathOfEndYear = "//*[@id='auto_gsid_17']/div[2]/span[2]/span[1]";
-	private static String xpathOfEndMonth = "//*[@id='auto_gsid_17']/div[2]/span[2]/span[2]";
+	private static String xpathOfTimeSelection2 = "//*[@id=\"auto_gsid_15\"]/div[2]/div[1]/a[7]";//时间选择框的xpath会随机变化,对应该值和下面的值
+	private static String xpathOfTimeSelection1 = "//*[@id=\"auto_gsid_15\"]/div[1]/div[1]/a[7]";
+	private static String xpathOfStartYear = "//*[@id='auto_gsid_16']/div[1]/span[2]/span[1]";
+	private static String xpathOfStartMonth = "//*[@id=\"auto_gsid_16\"]/div[1]/span[2]/span[2]";
+	private static String xpathOfEndYear = "//*[@id=\"auto_gsid_16\"]/div[2]/span[2]/span[1]";
+	private static String xpathOfEndMonth = "//*[@id=\"auto_gsid_16\"]/div[2]/span[2]/span[2]";
 	private static String xpathOfSubmitTime = "//*[@class='button ml20' and @value='确定']";
 	
 	private static String xpathOfCurrentTime = "//*[@id='viewbox']/div[1]/div[1]";
@@ -43,7 +44,8 @@ public class BDIndexBy {
 	public static By bdIndexNumStyle = By.xpath(xpathOfBDIndexNumStyle); 
 	
 	//自定义时间段
-	public static By bdindexTimeSelection = By.xpath(xpathOfTimeSelection);
+	public static By bdindexTimeSelection1 = By.xpath(xpathOfTimeSelection1);
+	public static By bdindexTimeSelection2 = By.xpath(xpathOfTimeSelection2);
 	public static By bdindexStartYear = By.xpath(xpathOfStartYear);
 	public static By bdindexStartMonth = By.xpath(xpathOfStartMonth);
 	public static By bdindexEndYear = By.xpath(xpathOfEndYear);

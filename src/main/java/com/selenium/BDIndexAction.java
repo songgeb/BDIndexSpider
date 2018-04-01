@@ -36,44 +36,27 @@ public class BDIndexAction {
 	 * 选择最近7天数据
 	 */
 	public static void clickCurrentSevenDaysData(WebDriver webdriver, Actions builder) {
-		WebElement dateSelectElement = webdriver.findElement(BDIndexBy.bdindexTimeSelection);
-		builder.moveToElement(dateSelectElement).click().build().perform();
-		WebElement currElement = webdriver.findElement(By.linkText("最近7天"));
+		WebElement currElement = webdriver.findElement(By.linkText("7天"));
 		builder.moveToElement(currElement).click().build().perform();
 		Wait.waitForLoad(webdriver);
 	}
 
 	/**
 	 * 自定义时间段获取数据
+	 * @throws InterruptedException 
 	 */
-	public static void customizeDate(WebDriver webdriver, Date startDate, Date endDate) {
+	public static void customizeDate(WebDriver webdriver, Date startDate, Date endDate) throws InterruptedException {
 		//处理错误页
 		Wait.waitForLoad(webdriver);
 		BDIndexUtil.handleErrorPage(webdriver);
 		
 		//设置时间
-		Wait.waitForLoad(webdriver);
-		String startYear = formattor.format(startDate).substring(0, 4);
-		String startMonth = formattor.format(startDate).substring(4, 6);
-		String endYear = formattor.format(endDate).substring(0, 4);
-		String endMonth = formattor.format(endDate).substring(4, 6);
-
-		webdriver.findElement(BDIndexBy.bdindexTimeSelection).click();
-		webdriver.findElement(By.linkText("自定义时间段")).click();
-
-		webdriver.findElement(BDIndexBy.bdindexStartYear).click();
-		webdriver.findElement(BDIndexBy.bdindexStartYearClick(startYear)).click();
-
-		webdriver.findElement(BDIndexBy.bdindexStartMonth).click();
-		webdriver.findElement(BDIndexBy.bdindexStartMothClick(startMonth)).click();
-
-		webdriver.findElement(BDIndexBy.bdindexEndYear).click();
-		webdriver.findElement(BDIndexBy.bdindexEndYearClick(endYear)).click();
-
-		webdriver.findElement(BDIndexBy.bdindexEndMonth).click();
-		webdriver.findElement(BDIndexBy.bdindexEndMonthClick(endMonth)).click();
-
-		webdriver.findElement(BDIndexBy.bdindexSubmitTime).click();
+		String url = webdriver.getCurrentUrl();
+		if (url.contains("time=")) {
+			return;
+		}
+		String newtimeUrl = url + "&time=" + formattor.format(startDate) + "|" + formattor.format(endDate);
+		webdriver.get(newtimeUrl);
 		Wait.waitForLoad(webdriver);
 	}
 
@@ -248,10 +231,10 @@ public class BDIndexAction {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-		System.setProperty("webdriver.chrome.driver", "bin/com/selenium/drivers/chromedriver_mac");
+		System.setProperty("webdriver.chrome.driver", "drivers/chromedriver_mac");
 		WebDriver chromeDriver = new ChromeDriver();
-		chromeDriver.get("http://index.baidu.com");
-		String filePath = Constant.logOutputDir + BDIndexUtil.getCurrenKeyword() + "(2222)"+".png";
-		ScreenShot.captureScreen((TakesScreenshot)chromeDriver, filePath);
+		chromeDriver.get("https://www.baidu.com");
+//		String filePath = Constant.logOutputDir + BDIndexUtil.getCurrenKeyword() + "(2222)"+".png";
+//		ScreenShot.captureScreen((TakesScreenshot)chromeDriver, filePath);
 	}
 }

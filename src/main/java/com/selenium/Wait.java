@@ -81,4 +81,10 @@ public class Wait {
 		WebDriverWait wait = new WebDriverWait(webdriver, timeout);
 		wait.until(ExpectedConditions.visibilityOfElementLocated(by));
 	}
+	
+	
+	public static void waitForElementClickable(WebDriver webdriver, By by, long timeout) {
+		WebDriverWait wait = new WebDriverWait(webdriver, timeout);
+		wait.until(ExpectedConditions.elementToBeClickable(by));
+	}
 }

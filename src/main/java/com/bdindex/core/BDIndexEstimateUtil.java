@@ -17,8 +17,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.remote.service.DriverService;
+import org.openqa.selenium.interactions.internal.Locatable;
 
 import com.selenium.BDIndexAction;
 import com.selenium.BDIndexBy;

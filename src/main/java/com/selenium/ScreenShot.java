@@ -14,7 +14,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.Locatable;
+import org.openqa.selenium.interactions.internal.Locatable;
 public  class ScreenShot {
 	
 	private static Logger logger = Logger.getLogger(ScreenShot.class);

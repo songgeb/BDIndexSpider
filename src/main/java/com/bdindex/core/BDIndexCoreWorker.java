@@ -16,8 +16,8 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriverService;
-import org.openqa.selenium.internal.Locatable;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.internal.Locatable;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.service.DriverService;
 import com.bdindex.exception.IndexNeedBuyException;
@@ -61,7 +61,7 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 				.usingAnyFreePort().build();
 		service.start();
 		webdriver = new RemoteWebDriver(service.getUrl(),
-				DesiredCapabilities.chrome());
+				new ChromeOptions());
 		// 第一次发送请求
 		webdriver.get(Constant.url);
 		// 处理错误页面
@@ -209,8 +209,7 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 		int mouseY = BDIndexUtil.getMouseY(webdriver, rectElement,
 				pointInViewport);
 		// 计算鼠标X轴单步移动距离(读取当前url的时间参数,计算步长,默认30天)
-		String currentURLString = webdriver.getCurrentUrl();
-		long days = BDIndexUtil.getDaysFromURL(currentURLString);
+		long days = BDIndexUtil.differentDays(startDate, endDate);
 		int rectWidth = rectElement.getSize().width;
 		float step = (rectWidth * 1.0f) / (days - 1);
 		// 鼠标移动事件
@@ -221,6 +220,7 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 		robot.mousePress(InputEvent.BUTTON1_MASK);
 		robot.mouseRelease(InputEvent.BUTTON1_MASK);
 		Thread.sleep(500);
+		
 		// 开始移动
 		for (int i = 0; i < days; i++) {
 			int mouseX = BDIndexUtil.getMouseX(rectWidth, pointInViewport,

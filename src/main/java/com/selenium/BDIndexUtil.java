@@ -10,6 +10,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -21,7 +22,7 @@ import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.Locatable;
+import org.openqa.selenium.interactions.internal.Locatable;
 import org.openqa.selenium.remote.service.DriverService;
 import com.bdindex.exception.ErrorPageException;
 import com.bdindex.exception.IndexNeedBuyException;
@@ -183,6 +184,41 @@ public class BDIndexUtil {
 		String outputDir = getOutputDir(keyword, startDate, endDate);
 		return outputDir + new File(outputDir).getName() + ".txt";
 	}
+	
+	public static int differentDays(Date date1,Date date2)
+    {
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(date1);
+        
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(date2);
+       int day1= cal1.get(Calendar.DAY_OF_YEAR);
+        int day2 = cal2.get(Calendar.DAY_OF_YEAR);
+        
+        int year1 = cal1.get(Calendar.YEAR);
+        int year2 = cal2.get(Calendar.YEAR);
+        if(year1 != year2)   //同一年
+        {
+            int timeDistance = 0 ;
+            for(int i = year1 ; i < year2 ; i ++)
+            {
+                if(i%4==0 && i%100!=0 || i%400==0)    //闰年            
+                {
+                    timeDistance += 366;
+                }
+                else    //不是闰年
+                {
+                    timeDistance += 365;
+                }
+            }
+            
+            return timeDistance + (day2-day1) ;
+        }
+        else    //不同年
+        {
+            return day2-day1;
+        }
+    }
 
 	/**
 	 * 提取URL中时间区域,计算出两个日期间相差天数 time=12;表示7天 time=13;表示30天
@@ -308,11 +344,11 @@ public class BDIndexUtil {
 			long days, float step, int i) {
 		int x = 0;
 		if (i == 0) {
-			x = pointInViewport.x;
+			x = pointInViewport.x + 2;
 		} else if (i == days - 1) {
-			x = (int) (pointInViewport.x + rectWidth);
+			x = (int) (pointInViewport.x + rectWidth - 2);
 		} else {
-			x = Math.round(pointInViewport.x + (step * i));
+			x = Math.round(pointInViewport.x + (step * i) + 2);
 		}
 		return x;
 	}
@@ -323,10 +359,12 @@ public class BDIndexUtil {
 				.executeScript("return window.outerHeight-window.innerHeight");
 		float y = 0.0f;
 		if (isMacOS()) {
+			//mac系统中，浏览器的地址栏和工具栏等高度以及顶部状态栏
 			y = pointInViewport.y + browserToolbarHeight
 					+ Constant.MAC_TOP_BAR_HEIGHT
 					+ (rectElement.getSize().height * scaleMouseY);
 		} else {
+			//Windows系统无顶部状态，但其他linux系统还未验证
 			y = pointInViewport.y + browserToolbarHeight
 					+ (rectElement.getSize().height * scaleMouseY);
 		}
@@ -359,10 +397,6 @@ public class BDIndexUtil {
 			try {
 				Wait.waitForElementPresence(webdriver, BDIndexBy.bdIndexRect,
 						waitTimeInSeconds);
-				WebElement rectElement = webdriver
-						.findElement(BDIndexBy.bdIndexRect);
-				// 使操作区域进入视野范围
-				((Locatable) rectElement).getCoordinates().inViewPort();
 				break;
 			} catch (Exception e2) {
 				logger.warn(getCurrenKeyword() + " : 找不到rect区域,正在重试...", e2);
@@ -370,9 +404,6 @@ public class BDIndexUtil {
 				if (isEnterErrorPage(webdriver)) {
 					webdriver.navigate().back();
 					Wait.waitForLoad(webdriver);
-					BDIndexAction.retryCustomizeDate(webdriver,
-							BDIndexUtil.getStartDate(),
-							BDIndexUtil.getEndDate(), 3);
 				} else {
 					BDIndexAction.refreshPage(webdriver);
 				}

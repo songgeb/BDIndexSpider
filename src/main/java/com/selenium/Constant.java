@@ -93,7 +93,7 @@ public class Constant {
 	}
 	
 	//操作系统状态栏
-	public static int MAC_TOP_BAR_HEIGHT = 30;//mac系统状态栏在顶部
+	public static int MAC_TOP_BAR_HEIGHT = 22;//mac系统状态栏在顶部
 	
 	//兼容相关
 	public static String newLineString = null;

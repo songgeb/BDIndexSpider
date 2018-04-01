@@ -155,9 +155,24 @@ public class ModelGenerator {
 
 	public static void main(String[] args) throws DocumentFormatException,
 			ModelDateException {
-		ModelGenerator m = new ModelGenerator();
-		File file = new File("src/main/resources/test.csv");
-		ArrayList<Model> models = m.get("csv", file);
-		System.out.println(models);
+		Model model = new Model();
+		try {
+		HashMap<String, Object> modelMap = new HashMap<>();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		modelMap.put("startDate", sdf.parse("2015/01/01"));
+		modelMap.put("endDate", sdf.parse("2015/02/01"));
+		modelMap.put("keyword", "nihao");
+			BeanUtils.populate(model, modelMap);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+//		ModelGenerator m = new ModelGenerator();
+//		File file = new File("src/main/resources/test.csv");
+//		ArrayList<Model> models = m.get("csv", file);
+//		System.out.println(models);
 	}
 }

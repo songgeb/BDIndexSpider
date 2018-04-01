@@ -19,7 +19,8 @@ import com.selenium.Constant;
 
 public class Util {
 
-	private static int dateSplitStepInAccurateMode = 10;
+	//将起始日期以该值所代表的月为单位划分为多个时间段,比如起始日期是2010年1月，截止日期时2015年1月，该值如果是12，则划分为五个时间段，每个时间段12个月
+	private static int dateSplitStepInAccurateMode = 5;
 	private static int dateSplitStepInEstimatedMode = 1;
 
 	private static Logger logger = Logger.getLogger(Util.class);
@@ -136,7 +137,8 @@ public class Util {
 			startCalendar.add(Calendar.MONTH, (i - 1) * dateSplitStep);
 			subStartDate = startCalendar.getTime();
 			tmpCalendar.setTime(subStartDate);
-			tmpCalendar.add(Calendar.MONTH, dateSplitStep - 1);
+			tmpCalendar.add(Calendar.MONTH, dateSplitStep);
+			tmpCalendar.add(Calendar.DAY_OF_MONTH, -1);
 			if (tmpCalendar.compareTo(endCalendar) >= 0) {
 				subEndDate = new Date(endCalendar.getTimeInMillis());
 			} else {
