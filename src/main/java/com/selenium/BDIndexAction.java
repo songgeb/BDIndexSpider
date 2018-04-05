@@ -25,8 +25,8 @@ public class BDIndexAction {
 
 	private static Logger logger = Logger.getLogger(BDIndexAction.class);
 
-	private static String username = "";//input your username
-	private static String password = "";//input your password
+	public static String username = "";//input your username
+	public static String password = "";//input your password
 
 	private static SimpleDateFormat formattor = new SimpleDateFormat("yyyyMMdd");
 

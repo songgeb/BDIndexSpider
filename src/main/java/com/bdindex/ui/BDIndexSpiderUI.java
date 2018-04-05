@@ -94,7 +94,7 @@ public class BDIndexSpiderUI {
 		menuBar.setBounds(0, 0, 611, 22);
 		frame.getContentPane().add(menuBar);
 
-		JMenu menu = new JMenu("导入");
+		JMenu menu = new JMenu("初始化");
 		menuBar.add(menu);
 
 		JMenuItem menuItem = new JMenuItem("从文件导入");
@@ -146,6 +146,19 @@ public class BDIndexSpiderUI {
 			}
 		});
 		menu.add(menuItem);
+		
+		JMenuItem loginItem = new JMenuItem("配置账户");
+		loginItem.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				super.mousePressed(e);
+				LoginDialog dialog = new LoginDialog();
+				dialog.setTitle("配置账户");
+				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				dialog.setVisible(true);
+			}
+		});
+		menu.add(loginItem);
 
 		JMenu mnNewMenu = new JMenu("工具");
 		menuBar.add(mnNewMenu);
