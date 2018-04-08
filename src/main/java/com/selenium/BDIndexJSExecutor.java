@@ -1,15 +1,19 @@
 package com.selenium;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+
 import com.bdindex.exception.IndexImgRequestFailException;
 
 public class BDIndexJSExecutor {
 	
 	private static Logger logger = Logger.getLogger(BDIndexJSExecutor.class);
+	private static SimpleDateFormat allIndexDateFormator = new SimpleDateFormat("yyyy-MM-dd");
 	
 	/**
 	 * 执行js代码
@@ -52,12 +56,106 @@ public class BDIndexJSExecutor {
 						"xhr.ontimeout = function() {"+ 
 						"	callback(false)" +
 						"};" +
-						"xhr.send();", "function (args){ return args; }"
+						"xhr.send(null);", "function (args){ return args; }"
 			  );
 		if ((Boolean)response == false) {
 			logger.warn("js请求图片失败,准备重试");
 			throw new IndexImgRequestFailException();
 		}
+	}
+	//同步方法
+	public static String[] requestWiseIndex(WebDriver webdriver,String keyword, String res, String res2, Date startDate, Date endDate) {
+		String urlString = "http://index.baidu.com/Interface/Search/getSubIndex/";
+		urlString += "?res=" + res;
+		urlString += "&res2=" + res2;
+		urlString += "&startdate=" + allIndexDateFormator.format(startDate);
+		urlString += "&enddate=" + allIndexDateFormator.format(endDate);
+		urlString += "&type=0&forecast=0";
+		urlString += "&word="+keyword;
+		System.out.println(urlString);
+		webdriver.manage().timeouts().setScriptTimeout(8, TimeUnit.SECONDS);
+		Object response = ((JavascriptExecutor) webdriver).executeAsyncScript(
+				"var callback = arguments[arguments.length - 1];" +
+				"var xhr = new XMLHttpRequest();" +
+				"xhr.open('GET', '"+urlString+"', true);" +
+				"xhr.timeout = 6000;" +
+				"xhr.onload = function() {" +
+				"  if (xhr.status == 200) {" +
+				"var json = JSON.parse(this.responseText);"+
+				"    	callback(json.data.all[0].userIndexes_enc);" +
+				"  	} else {" +
+				"		callback('false');" +
+				"	}" +
+				"};" +
+				"xhr.ontimeout = function() {"+ 
+				"	callback('false')" +
+				"};" +
+				"xhr.send(null);", "function (args){ return args; }"
+				);
+		System.out.println(response);
+		return ((String)response).split(",");
+	}
+	
+	public static String requestImageDes(WebDriver webdriver, String res, String res2, String wiseIndex) {
+		String urlString = "http://index.baidu.com/Interface/IndexShow/show/";
+		urlString += "?res=" + res;
+		urlString += "&res2=" + res2;
+		urlString += "&res3[]=" + wiseIndex;
+		urlString += "&classType=1&className=view-value";
+//		urlString += System.currentTimeMillis() + "";
+		webdriver.manage().timeouts().setScriptTimeout(8, TimeUnit.SECONDS);
+		Object response = ((JavascriptExecutor) webdriver).executeAsyncScript(
+				"var callback = arguments[arguments.length - 1];" +
+				"var xhr = new XMLHttpRequest();" +
+				"xhr.open('GET', '"+urlString+"', true);" +
+				"xhr.timeout = 6000;" +
+				"xhr.onload = function() {" +
+				"  if (xhr.status == 200) {" +
+				"		var json = JSON.parse(this.responseText);"+
+				"    	callback(json.data.code[0]);" +
+				"  	} else {" +
+				"		callback('false');" +
+				"	}" +
+				"};" +
+				"xhr.ontimeout = function() {"+ 
+				"	callback('false')" +
+				"};" +
+				"xhr.send(null);", "function (args){ return args; }"
+				);
+		
+		System.out.println(response);
+		if (((String)response).equals("false")) {
+			return null;
+		}
+		return (String)response;
+	}
+	
+	public static void requestIndexImg(WebDriver webdriver, String urlString) throws Exception {
+		webdriver.manage().timeouts().setScriptTimeout(8, TimeUnit.SECONDS);
+		
+		Object response = ((JavascriptExecutor) webdriver).executeAsyncScript(
+						"var callback = arguments[arguments.length - 1];" +
+						"var xhr = new XMLHttpRequest();" +
+						"xhr.open('GET', '"+urlString+"', true);" +
+						"xhr.timeout = 6000;" +
+						"xhr.responseType = 'blob';" +
+						"xhr.onload = function() {" +
+						"  if (xhr.status == 200) {" +
+						"    	callback(this.responseText);" +
+						"  	} else {" +
+						"		callback('false');" +
+						"	}" +
+						"};" +
+						"xhr.ontimeout = function() {"+ 
+						"	callback('false')" +
+						"};" +
+						"xhr.send(null);", "function (args){ return args; }"
+			  );
+		if (((String)response).equals("false")) {
+			logger.warn("js下载图片失败");
+			throw new IndexImgRequestFailException();
+		}
+		System.out.println(response);
 	}
 	
 	/**

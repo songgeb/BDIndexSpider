@@ -4,12 +4,16 @@ import java.awt.Robot;
 import java.awt.event.InputEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
 import javax.swing.AbstractButton;
 import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
 import org.apache.log4j.Logger;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
@@ -28,15 +32,19 @@ import com.bdindex.ui.UIUpdateModel;
 import com.bdindex.ui.Util;
 import com.selenium.BDIndexAction;
 import com.selenium.BDIndexBy;
+import com.selenium.BDIndexJSExecutor;
 import com.selenium.BDIndexUtil;
 import com.selenium.Constant;
 import com.selenium.ScreenShot;
+import com.selenium.Wait;
 
 public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 	private static SimpleDateFormat logDateFormat = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
 	private static SimpleDateFormat yearMonthDateFormat = new SimpleDateFormat(
 			"yyyyMM");
+	private static SimpleDateFormat imgNameDateFormat = new SimpleDateFormat(
+			"yyyy-MM-dd");
 	private static Logger logger = Logger.getLogger(BDIndexCoreWorker.class);
 	private DriverService service;
 	private WebDriver webdriver;
@@ -113,7 +121,7 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 		BDIndexUtil.setStartDate(startDate);
 		BDIndexUtil.setEndDate(endDate);
 		BDIndexUtil.setCurrentKeyword(keyword);
-		submitKeyword(keyword, startDate, endDate);
+		submitKeyword(keyword);
 		// 找到trend/svg/rect区域
 		WebElement rectElement = null;
 		BDIndexAction.retryCustomizeDate(webdriver, startDate, endDate, 3);
@@ -156,7 +164,7 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 	 * @param endDate
 	 * @throws Exception
 	 */
-	private void submitKeyword(String keyword, Date startDate, Date endDate)
+	private void submitKeyword(String keyword)
 			throws Exception {
 		// 处理错误页
 		BDIndexUtil.handleErrorPage(webdriver);
@@ -177,8 +185,68 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 				endDate);
 		String outputDir = BDIndexUtil
 				.getOutputDir(keyword, startDate, endDate);
+		submitKeyword(keyword);
+		String url = webdriver.getCurrentUrl();
+		if (url.contains("time=")) {
+			return;
+		}
+		String res = (String)((JavascriptExecutor) webdriver).executeScript("return PPval.ppt;");
+		String res2 = (String)((JavascriptExecutor) webdriver).executeScript("return PPval.res2;");
 		for (int i = 0; i < list.size(); i++) {
-			accurateAction(keyword, list.get(i)[0], list.get(i)[1], outputDir);
+			//此处为快速抓取百度指数代码
+			//list.get(i)[0]--startDate
+			//list.get(i)[1]--endDate
+			Date subStartDate = list.get(i)[0];
+			Date subEndDate = list.get(i)[1];
+			String []wiseIndices = BDIndexJSExecutor.requestWiseIndex(webdriver,keyword,res, res2, subStartDate, subEndDate);
+			System.out.println("指数总数量-->" + wiseIndices.length);
+			//每次des和image都是不同的，要对应起来
+			Calendar tmpCalendar = Calendar.getInstance();
+			for (int j = 0; j < wiseIndices.length; j++) {
+				String desc = BDIndexJSExecutor.requestImageDes(webdriver,res, res2, wiseIndices[j]);
+				String html =  "\"<table style='background-color: #444;'><tbody><tr><td class='view-value'>";
+				html += desc.replaceAll("\"", "'");
+				html += "</td></tr></tbody></table>\"";
+				
+				//将渲染后的百度指数div添加到百度指数页面
+				int retryCount = 0;
+				By indexBy = By.xpath("/html/body/div/table/tbody/tr/td");
+				while (retryCount < 5) {
+					((JavascriptExecutor)webdriver).executeScript( 
+							"var body = document.getElementsByTagName('body');" + 
+							"var newDiv = document.createElement('div');" + 
+							"newDiv.setAttribute('name', 'songgeb');"+
+							"newDiv.innerHTML = " + html  +";" +
+							"body[0].appendChild(newDiv);");
+					try {
+						Wait.waitForElementVisible(webdriver, indexBy, 10);
+						webdriver.findElement(indexBy);
+						break;
+					} catch(Exception e) {
+						retryCount ++;
+						((JavascriptExecutor)webdriver).executeScript(""
+								+ "var e = document.getElementsByName('songgeb');\n" + 
+								"e[0].parentNode.removeChild(e[0]);");
+					}
+				}
+				
+				//截图
+				WebElement targetEle = webdriver.findElement(indexBy);
+				tmpCalendar.clear();
+				tmpCalendar.setTime(subStartDate);
+				tmpCalendar.add(Calendar.DAY_OF_MONTH, j);
+				String imgFileName = imgNameDateFormat.format(tmpCalendar.getTime());
+				ScreenShot.capturePicForAccurateMode(
+						(TakesScreenshot) webdriver, targetEle,
+						imgFileName + ".png", outputDir);
+				//删除添加的百度指数div
+				((JavascriptExecutor)webdriver).executeScript(""
+						+ "var e = document.getElementsByName('songgeb');\n" + 
+						"e[0].parentNode.removeChild(e[0]);");
+			}
+			
+			//以下为精确抓取代码
+//			accurateAction(keyword, list.get(i)[0], list.get(i)[1], outputDir);
 		}
 		OCRUtil.doOCR(outputDir, outputDir);
 	}
@@ -190,13 +258,14 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 	 * @param startDate
 	 * @param endDate
 	 */
+	@SuppressWarnings("unused")
 	private void accurateAction(String keyword, Date startDate, Date endDate,
 			String outputDir) throws Exception {
 		// 这很重要
 		BDIndexUtil.setStartDate(startDate);
 		BDIndexUtil.setEndDate(endDate);
 		BDIndexUtil.setCurrentKeyword(keyword);
-		submitKeyword(keyword, startDate, endDate);
+		submitKeyword(keyword);
 		// 找到trend/svg/rect区域
 		WebElement rectElement = null;
 		BDIndexAction.retryCustomizeDate(webdriver, startDate, endDate, 3);
