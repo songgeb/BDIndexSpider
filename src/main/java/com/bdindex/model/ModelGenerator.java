@@ -34,9 +34,9 @@ public class ModelGenerator {
 	 * @throws IllegalAccessException
 	 * 
 	 */
-	public ArrayList<Model> get(String inputType, File filePath)
+	public ArrayList<Model> get(String inputType, File file)
 			throws DocumentFormatException, ModelDateException {
-		reader = ReaderFactory.newInstance().create(inputType, filePath);
+		reader = ReaderFactory.newInstance().create(inputType, file);
 		if (reader == null)
 			logger.info("Reader null");
 		logger.info(reader.getClass().getName());
@@ -145,6 +145,7 @@ public class ModelGenerator {
 							+ " 行结束日期不能小于开始日期");
 				}
 			} catch (IllegalAccessException | InvocationTargetException e) {
+				e.printStackTrace();
 				throw new DocumentFormatException(String.valueOf(count));
 			}
 			modelList.add(model);

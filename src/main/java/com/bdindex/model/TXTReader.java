@@ -2,13 +2,16 @@ package com.bdindex.model;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+
+import com.bdindex.ui.Util;
 
 
 
@@ -27,11 +30,8 @@ public class TXTReader extends ArrayList<String> implements Reader {
 	public void read(File file) {
 		StringBuilder sb = new StringBuilder();
 		try {
-			
-			BufferedReader in = new BufferedReader(new FileReader(
-					file.getAbsolutePath()));
-//			InputStream is = getClass().getResourceAsStream(file.getName());
-//			BufferedReader in = new BufferedReader(new InputStreamReader(is));
+			InputStreamReader tmpReader = new InputStreamReader(new FileInputStream(file), Util.get_charset(file));
+			BufferedReader in = new BufferedReader(tmpReader);
 			// 清除bom标记
 			String s = in.readLine().trim();
 			if (Objects.equals(s.charAt(0), BOM)) {
@@ -40,7 +40,6 @@ public class TXTReader extends ArrayList<String> implements Reader {
 			this.add(s);
 			try {
 				while ((s = in.readLine()) != null) {
-					System.out.println(s);
 					this.add(s);
 					sb.append(s.trim());
 					sb.append("\n");

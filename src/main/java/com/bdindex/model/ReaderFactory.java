@@ -3,9 +3,11 @@ package com.bdindex.model;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -54,7 +56,6 @@ public class ReaderFactory {
 					try {
 						res = reader.getConstructor(File.class).newInstance(
 								file);
-						// res = reader.newInstance();
 					} catch (InstantiationException e) {
 						e.printStackTrace();
 					} catch (IllegalAccessException e) {
@@ -72,6 +73,8 @@ public class ReaderFactory {
 			}
 		} catch (URISyntaxException e1) {
 			e1.printStackTrace();
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
 		}
 		return res;
 	}
@@ -80,18 +83,20 @@ public class ReaderFactory {
 	 * @param 生成model类所在包名
 	 * @return 生成model类列表
 	 * @throws URISyntaxException
+	 * @throws UnsupportedEncodingException 
 	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
 	private List<Class<? extends Reader>> load(String packageName)
-			throws URISyntaxException {
+			throws URISyntaxException, UnsupportedEncodingException {
 		List<Class<? extends Reader>> list = new ArrayList<Class<? extends Reader>>();
 
 		// 判断是jar运行还是ide运行
-		String newPackage = packageName.replace(".", "/") + "/";
 		String path = ReaderFactory.class.getProtectionDomain().getCodeSource()
 				.getLocation().getPath();
+		path = URLDecoder.decode(path, "UTF-8");
 		File jarFile = new File(path);
+		System.out.println("jarFile exist!-->" + jarFile.exists());
 		// 兼容从jar中读取
 		String fileName = null; // 要载入的策略类
 		if (jarFile.isFile()) {
@@ -100,6 +105,7 @@ public class ReaderFactory {
 				jar = new JarFile(jarFile);
 				final Enumeration<JarEntry> entries = jar.entries();
 				// gives ALL entries in jar
+				String newPackage = packageName.replace(".", "/") + "/";
 				while (entries.hasMoreElements()) {
 					final String name = entries.nextElement().getName();
 					if (name.startsWith(newPackage) && name.endsWith(".class")) {

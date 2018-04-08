@@ -199,7 +199,6 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 			Date subStartDate = list.get(i)[0];
 			Date subEndDate = list.get(i)[1];
 			String []wiseIndices = BDIndexJSExecutor.requestWiseIndex(webdriver,keyword,res, res2, subStartDate, subEndDate);
-			System.out.println("指数总数量-->" + wiseIndices.length);
 			//每次des和image都是不同的，要对应起来
 			Calendar tmpCalendar = Calendar.getInstance();
 			for (int j = 0; j < wiseIndices.length; j++) {
@@ -457,7 +456,6 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 		super.process(chunks);
 		for (int i = 0; i < chunks.size(); i++) {
 			UIUpdateModel model = chunks.get(i);
-			System.out.println(model.getTextAreaContent());
 			textArea.append(model.getTextAreaContent());
 			Util.setButtonsStatus(buttons, model.isButtonEnable());
 			tableModel.fireTableDataChanged();

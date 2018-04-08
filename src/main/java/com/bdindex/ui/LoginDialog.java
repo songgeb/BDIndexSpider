@@ -40,7 +40,7 @@ public class LoginDialog extends JDialog {
 	 * Create the dialog.
 	 */
 	public LoginDialog() {
-		setBounds(100, 100, 332, 144);
+		setBounds(100, 100, 332, 170);
 		getContentPane().setLayout(null);
 		contentPanel.setBounds(0, 0, 330, 120);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

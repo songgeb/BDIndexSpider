@@ -72,7 +72,6 @@ public class BDIndexJSExecutor {
 		urlString += "&enddate=" + allIndexDateFormator.format(endDate);
 		urlString += "&type=0&forecast=0";
 		urlString += "&word="+keyword;
-		System.out.println(urlString);
 		webdriver.manage().timeouts().setScriptTimeout(8, TimeUnit.SECONDS);
 		Object response = ((JavascriptExecutor) webdriver).executeAsyncScript(
 				"var callback = arguments[arguments.length - 1];" +
@@ -92,7 +91,6 @@ public class BDIndexJSExecutor {
 				"};" +
 				"xhr.send(null);", "function (args){ return args; }"
 				);
-		System.out.println(response);
 		return ((String)response).split(",");
 	}
 	
@@ -123,7 +121,6 @@ public class BDIndexJSExecutor {
 				"xhr.send(null);", "function (args){ return args; }"
 				);
 		
-		System.out.println(response);
 		if (((String)response).equals("false")) {
 			return null;
 		}
@@ -155,7 +152,6 @@ public class BDIndexJSExecutor {
 			logger.warn("js下载图片失败");
 			throw new IndexImgRequestFailException();
 		}
-		System.out.println(response);
 	}
 	
 	/**
