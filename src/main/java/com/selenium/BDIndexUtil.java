@@ -665,7 +665,7 @@ public class BDIndexUtil {
 	 * @param styleText
 	 * @return
 	 */
-	private static String getURLStringFromStyleText(String styleText) {
+	public static String getURLStringFromStyleText(String styleText) {
 		// styleText格式:rgba(x,x,x,x) url(http://xxxxx)xxxx
 		String tmp = styleText.split("url")[1].split("\\)")[0];
 		return tmp.substring(2, tmp.length() - 1);

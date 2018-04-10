@@ -217,9 +217,20 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 							"newDiv.setAttribute('name', 'songgeb');"+
 							"newDiv.innerHTML = " + html  +";" +
 							"body[0].appendChild(newDiv);");
+					//多拉取来一次，增大图片拉取概率
 					try {
 						Wait.waitForElementVisible(webdriver, indexBy, 10);
 						webdriver.findElement(indexBy);
+						WebElement tmp = webdriver.findElement(By.xpath("/html/body/div/table/tbody/tr/td/span[1]/div"));
+						String imgURLStr = BDIndexUtil.getURLStringFromStyleText(tmp
+								.getCssValue("background"));
+						int imgRetryCount = 0;
+						while (imgRetryCount < 5) {
+							if (BDIndexJSExecutor.requestIndexImg(webdriver, imgURLStr)) {
+								break;
+							}
+							imgRetryCount++;
+						}
 						break;
 					} catch(Exception e) {
 						retryCount ++;

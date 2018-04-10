@@ -127,7 +127,7 @@ public class BDIndexJSExecutor {
 		return (String)response;
 	}
 	
-	public static void requestIndexImg(WebDriver webdriver, String urlString) throws Exception {
+	public static Boolean requestIndexImg(WebDriver webdriver, String urlString) throws Exception {
 		webdriver.manage().timeouts().setScriptTimeout(8, TimeUnit.SECONDS);
 		
 		Object response = ((JavascriptExecutor) webdriver).executeAsyncScript(
@@ -138,20 +138,17 @@ public class BDIndexJSExecutor {
 						"xhr.responseType = 'blob';" +
 						"xhr.onload = function() {" +
 						"  if (xhr.status == 200) {" +
-						"    	callback(this.responseText);" +
+						"    	callback(true);" +
 						"  	} else {" +
-						"		callback('false');" +
+						"		callback(false);" +
 						"	}" +
 						"};" +
 						"xhr.ontimeout = function() {"+ 
-						"	callback('false')" +
+						"	callback(false)" +
 						"};" +
 						"xhr.send(null);", "function (args){ return args; }"
 			  );
-		if (((String)response).equals("false")) {
-			logger.warn("js下载图片失败");
-			throw new IndexImgRequestFailException();
-		}
+		return (Boolean)response;
 	}
 	
 	/**

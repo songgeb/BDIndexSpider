@@ -221,12 +221,13 @@ public class BDIndexSpiderUI {
 
 		final JRadioButton radioButton = new JRadioButton("曲线推算");
 		radioButton.setActionCommand("estimate");
-		radioButton.setSelected(true);
 		radioButton.setBounds(6, 13, 84, 23);
+		radioButton.setEnabled(false);
 		panel.add(radioButton);
 
 		final JRadioButton radioButton_1 = new JRadioButton("精确抓取");
 		radioButton_1.setActionCommand("accurate");
+		radioButton_1.setSelected(true);
 		radioButton_1.setBounds(104, 13, 84, 23);
 		panel.add(radioButton_1);
 
