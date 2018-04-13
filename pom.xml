@@ -50,11 +50,6 @@
     	</dependency>  
      
 		<!-- http://mvnrepository.com/artifact/net.sourceforge.tess4j/tess4j -->
-		<dependency>
-			<groupId>net.sourceforge.tess4j</groupId>
-			<artifactId>tess4j</artifactId>
-			<version>3.0.0</version>
-		</dependency>
 		<!-- Apache Commons csv -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -76,17 +71,12 @@
 		<!-- 打包配置 -->
 		<resources>
 			<resource>
-				<directory>tessdata</directory>
-				<targetPath>tessdata</targetPath>
-			</resource>
-			<resource>
 				<directory>src/main/resources</directory>
 			</resource>
 			<resource>
 				<directory>drivers</directory>
 				<targetPath>drivers</targetPath>
 			</resource>
-
 		</resources>
 
 
@@ -237,14 +227,4 @@
 		</pluginManagement>
 
 	</build>
-
-
-
-
-
-
-
-
-
-
 </project>

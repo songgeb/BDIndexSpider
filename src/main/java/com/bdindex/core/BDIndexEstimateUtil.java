@@ -27,21 +27,10 @@ import com.selenium.Constant;
 import com.selenium.ScreenShot;
 import com.selenium.Wait;
 
-import net.sourceforge.tess4j.ITesseract;
-import net.sourceforge.tess4j.Tesseract;
-
 public class BDIndexEstimateUtil {
 
 	private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-	private static ITesseract ocrInstance = new Tesseract();
 	private static Logger logger = Logger.getLogger(BDIndexEstimateUtil.class);
-	static {
-		ArrayList<String> configs = new ArrayList<>();
-		configs.add("digits");
-		ocrInstance.setConfigs(configs);
-		ocrInstance.setDatapath("./tessdata");
-		ocrInstance.setLanguage("yaxislang");
-	}
 
 	/**
 	 * JS加载Y坐标刻度,将图片写入本地
@@ -85,9 +74,8 @@ public class BDIndexEstimateUtil {
 	 */
 	public static int[] doEstimatedValue(String yAxisFilePath,
 			String trendFilePath, long days) throws Exception {
-		File file = new File(yAxisFilePath);
-		String[] result = ocrInstance.doOCR(file).trim().replace(",", "")
-				.replace(" ", "").split("\n");
+//		File file = new File(yAxisFilePath);
+		String[] result = {"null"};
 		// 过滤掉无用的换行符或空串
 		ArrayList<String> array = new ArrayList<>();
 		for (int i = 0; i < result.length; i++) {
@@ -224,7 +212,5 @@ public class BDIndexEstimateUtil {
 		// System.out.println("处理后:" + array.size());
 
 		// System.out.println(result[1].length());
-		System.out.println(ocrInstance.doOCR(new File(
-				"estimatedPics/nba(20160325-20160524)/201603-201603.png")));
 	}
 }

@@ -14,7 +14,6 @@ import javax.swing.JTextArea;
 import org.apache.log4j.Logger;
 
 import com.bdindex.core.BDIndexCoreWorker;
-import com.bdindex.core.OCRUtil;
 import com.bdindex.exception.DocumentFormatException;
 import com.bdindex.exception.ModelDateException;
 import com.bdindex.model.Model;
@@ -60,7 +59,6 @@ public class BDIndexSpiderUI {
 					window.frame.setVisible(true);
 					window.frame.setResizable(false);
 					window.frame.setTitle("百度指数Spider");
-					OCRUtil.init();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

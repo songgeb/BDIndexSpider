@@ -1,50 +1,18 @@
 package com.bdindex.core;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
 
 import com.selenium.Constant;
 
-import net.sourceforge.tess4j.ITessAPI;
-import net.sourceforge.tess4j.ITesseract;
-import net.sourceforge.tess4j.Tesseract;
-
 public class OCRUtil {
 
-	private static ITesseract ocrInstance;
 	private static Logger logger = Logger.getLogger(OCRUtil.class);
-
-	static {
-		ArrayList<String> configs = new ArrayList<>();
-		ocrInstance = new Tesseract();
-		configs.add("digits");
-		ocrInstance.setDatapath("./tessdata");
-		ocrInstance.setConfigs(configs);
-		ocrInstance.setPageSegMode(ITessAPI.TessPageSegMode.PSM_SINGLE_LINE);
-		ocrInstance.setLanguage("bdindexlang");
-	}
-
-	public static void init() {
-		InputStream in = OCRUtil.class.getResourceAsStream("/tessdata/configs/digits");
-		BufferedReader br = new BufferedReader(new InputStreamReader(in));
-		String line;
-		try{
-			while ((line = br.readLine()) != null) {
-				logger.info("TESSDATA: " + line);
-			}
-		}catch(IOException e) {
-			
-		}
-		
-	}
 
 	/**
 	 * 进行OCR识别 结果文件为txt文本文件,文件名与目录名一致
@@ -86,8 +54,8 @@ public class OCRUtil {
 				writer.write(file.getName().substring(0,
 						file.getName().indexOf(".")));
 				writer.write(" ");
-				text = ocrInstance.doOCR(file).trim().replace(" ", "")
-						.replace(",", "");
+				
+				text = HanmingOCR.doHanmingOCR(ImageIO.read(file));
 				logger.info("OCR PNG TEXT: " + text);
 				writer.write(text);
 				writer.write(Constant.newLineString);
