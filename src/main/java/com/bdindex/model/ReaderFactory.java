@@ -96,7 +96,6 @@ public class ReaderFactory {
 				.getLocation().getPath();
 		path = URLDecoder.decode(path, "UTF-8");
 		File jarFile = new File(path);
-		System.out.println("jarFile exist!-->" + jarFile.exists());
 		// 兼容从jar中读取
 		String fileName = null; // 要载入的策略类
 		if (jarFile.isFile()) {
@@ -145,7 +144,6 @@ public class ReaderFactory {
 			for (File file : mgFiles) {
 				String b = file.getName().replace(".class", "");
 				String a = packageName + "." + b;
-				System.out.println(a);
 				fileName = a;
 				// log
 				try {

@@ -109,7 +109,7 @@ public class Constant {
 	
 	//模式
 	public enum ExecutionMode {
-		Estimate,
+		Estimate,//已弃用
 		Accurate
 	}
 	public static ExecutionMode currentMode;
