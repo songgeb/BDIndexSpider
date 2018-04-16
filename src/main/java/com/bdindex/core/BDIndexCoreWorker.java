@@ -108,6 +108,7 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 		String outputDir = BDIndexUtil
 				.getOutputDir(keyword, startDate, endDate);
 		submitKeyword(keyword);
+		Wait.waitForLoad(webdriver);
 		String url = webdriver.getCurrentUrl();
 		if (url.contains("time=")) {
 			return;

@@ -96,10 +96,11 @@ public class BDIndexAction {
 	 */
 	public static void searchKeyword(WebDriver webdriver, String keyword) {
 		Wait.waitForLoad(webdriver);
-		if (webdriver.getCurrentUrl().contains(Constant.unloadURL)) {
+		if (webdriver.getCurrentUrl().contains(Constant.unloadURL)) {//处理一些特殊情况
 			webdriver.get(Constant.url);
 			Wait.waitForLoad(webdriver);
 		}
+		Wait.waitForElementClickable(webdriver, BDIndexBy.searchTextField, 20);
 		webdriver.findElement(BDIndexBy.searchTextField).clear();
 		webdriver.findElement(BDIndexBy.searchTextField).sendKeys(keyword);
 		webdriver.findElement(BDIndexBy.searchTextField).submit();
