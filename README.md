@@ -18,7 +18,7 @@
 - 运行前，需要在左上角初始化中**配置账户密码**和导入要抓取的**关键词**
 - 需要安装**Chrome**浏览器
 - 源码中的`a.txt`为输入文件格式要求，可以**输入多行**
-- 如果不想运行源码，可以直接下载`executable`目录下的`jar`文件，直接运行即可
+- 如果不想运行源码，可以直接下载可执行`jar`文件，[地址](https://github.com/songgeb/BDIndexSpider/releases)
 
 ### ChangeLog
 
