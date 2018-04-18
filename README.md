@@ -19,6 +19,7 @@
 - 需要安装**Chrome**浏览器
 - 源码中的`a.txt`为输入文件格式要求，可以**输入多行**
 - 如果不想运行源码，可以直接下载可执行`jar`文件，[地址](https://github.com/songgeb/BDIndexSpider/releases)
+- 关于抓取频率限制问题可以看[这里](https://github.com/songgeb/BDIndexSpider/issues/2)
 
 ### ChangeLog
 
