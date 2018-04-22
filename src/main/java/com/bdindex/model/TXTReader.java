@@ -70,7 +70,7 @@ public class TXTReader extends ArrayList<String> implements Reader {
 			HashMap<String, String> modelArgMaps = null;
 			String[] args = this.get(i).trim().split(spiltter);
 			// 这里还需要改,改为抛出异常？
-			if (!Objects.equals(args.length, 3)) {
+			if (args.length < 3) { //3是指，输入中至少要包含关键词和开始、结束日期
 				int count = i + 1;
 				throw new IllegalArgumentException(String.valueOf(count));
 			}

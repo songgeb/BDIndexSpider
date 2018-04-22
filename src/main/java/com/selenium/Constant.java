@@ -122,6 +122,7 @@ public class Constant {
 	public static class Status {
 		public static String Model_Start = "开始"; 
 		public static String Model_End = "结束"; 
+		public static String Model_City_Error = "地区不存在"; 
 		
 		public static String  Model_Exception = "发生异常"; 
 		public static String  Model_IndexNeedBuyException = "数据服务需购买"; 

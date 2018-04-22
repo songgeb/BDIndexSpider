@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.AbstractButton;
 import javax.swing.JTextArea;
@@ -101,15 +102,22 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 	/**
 	 * 精确抓取百度指数
 	 */
-	private void accurateBDIndex(String keyword, Date startDate, Date endDate)
+	private void accurateBDIndex(Model model, String cityID)
 			throws Exception {
-		ArrayList<Date[]> list = Util.getDatePairsBetweenDates(startDate,
-				endDate);
+		//分割时间
+		ArrayList<Date[]> list = Util.getDatePairsBetweenDates(model.getStartDate(),
+				model.getEndDate());
 		String outputDir = BDIndexUtil
-				.getOutputDir(keyword, startDate, endDate);
-		submitKeyword(keyword);
+				.getOutputDir(model.getKeyword(), model.getStartDate(), model.getEndDate());
+		//输入关键词
+		submitKeyword(model.getKeyword());
 		Wait.waitForLoad(webdriver);
+		//设置地区
 		String url = webdriver.getCurrentUrl();
+		webdriver.get(url+"&area="+cityID);
+		Wait.waitForLoad(webdriver);
+		
+		url = webdriver.getCurrentUrl();
 		if (url.contains("time=")) {
 			return;
 		}
@@ -121,7 +129,7 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 			//list.get(i)[1]--endDate
 			Date subStartDate = list.get(i)[0];
 			Date subEndDate = list.get(i)[1];
-			String []wiseIndices = BDIndexJSExecutor.requestWiseIndex(webdriver,keyword,res, res2, subStartDate, subEndDate);
+			String []wiseIndices = BDIndexJSExecutor.requestWiseIndex(webdriver,model.getKeyword(),res, res2, subStartDate, subEndDate);
 			//每次des和image都是不同的，要对应起来
 			Calendar tmpCalendar = Calendar.getInstance();
 			for (int j = 0; j < wiseIndices.length; j++) {
@@ -201,6 +209,21 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 			BDIndexUtil.closeSession(webdriver, service);
 			return;
 		}
+		//获取城市信息
+		Wait.waitForLoad(webdriver);
+		@SuppressWarnings("unchecked")
+		Map<String, String> cities = (Map<String, String>)((JavascriptExecutor)webdriver).executeScript(
+				"var strArr = BID['cityIDname'].strArr;\n" + 
+				"var sbCities = {};\n" + 
+				"for (var i = 0; i < strArr.length; i++) {\n" + 
+				"    var str = strArr[i];\n" + 
+				"    var items = str.split(',');     \n" + 
+				"	 for (var j = 0; j < items.length; j+=2) {\n" + 
+				"		sbCities[items[j+1]] = items[j];\n" + 
+				"	 }\n" + 
+				"}\n" + 
+				"sbCities['全国']=0;"+
+				"return sbCities;");
 		// 执行过程
 		UIUpdateModel updateModel = null;
 		long startTime = 0;
@@ -210,12 +233,27 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 			publish(new UIUpdateModel(getTextAreaContent(model.getKeyword(),
 					Constant.Status.Model_Start), false));
 			try {
+				//check city
+				String cityID = "0";//0表示全国
+				if (model.getCity() == null) {
+					if (model.getProvince() != null) {
+						cityID = cities.get(model.getProvince());
+					}
+				} else {
+					cityID = cities.get(model.getCity());
+				}
+				if (cityID == null) {
+					model.setStatus(Constant.Status.Model_City_Error);
+					updateModel = new UIUpdateModel(getTextAreaContent(model.getKeyword(),
+							Constant.Status.Model_City_Error), false);
+					continue;
+				}
+				
 				switch (Constant.currentMode) {
 				case Estimate:
 					break;
 				case Accurate:
-					accurateBDIndex(model.getKeyword(), model.getStartDate(),
-							model.getEndDate());
+					accurateBDIndex(model, cityID);
 					break;
 				default:
 					return;
@@ -294,6 +332,7 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 		super.process(chunks);
 		for (int i = 0; i < chunks.size(); i++) {
 			UIUpdateModel model = chunks.get(i);
+			//model must not be null
 			textArea.append(model.getTextAreaContent());
 			Util.setButtonsStatus(buttons, model.isButtonEnable());
 			tableModel.fireTableDataChanged();

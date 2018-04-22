@@ -8,9 +8,13 @@ import java.util.Date;
  * 输入model
  **/
 public class Model {
+	//属性的顺序与txt reader读入文件时中的每个值对应
 	protected String keyword;
 	protected Date startDate;
 	protected Date endDate;
+	protected String province;
+	protected String city;
+	//以下属性来自程序运行过程，不来自txt输入文件
 	protected long time;
 	protected String status;
 
@@ -34,7 +38,7 @@ public class Model {
 	}
 
 	public void setKeyword(String keyword) {
-		this.keyword = keyword;
+		this.keyword = keyword.trim();
 	}
 
 	public Date getStartDate() {
@@ -101,6 +105,8 @@ public class Model {
 		this.endDate = null;
 		this.status = "未运行";
 		this.time = 0;
+		this.province = null;
+		this.city = null;
 	}
 
 	public Model(String keyword, Date startDate, Date endDate) {
@@ -109,5 +115,23 @@ public class Model {
 		this.endDate = endDate;
 		this.status = "未运行";
 		this.time = 0;
+		this.province = null;
+		this.city = null;
+	}
+
+	public String getProvince() {
+		return province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province.trim();
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city.trim();
 	}
 }
