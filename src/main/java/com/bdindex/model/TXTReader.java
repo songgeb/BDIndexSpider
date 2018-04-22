@@ -65,7 +65,6 @@ public class TXTReader extends ArrayList<String> implements Reader {
 	public ArrayList<HashMap<String, String>> generate()
 			throws IllegalArgumentException {
 		ArrayList<HashMap<String, String>> res = new ArrayList<HashMap<String, String>>();
-//		System.out.println("modelNum: " + modelNum);
 		for (int i = 0; i < modelNum; i++) {
 			HashMap<String, String> modelArgMaps = null;
 			String[] args = this.get(i).trim().split(spiltter);

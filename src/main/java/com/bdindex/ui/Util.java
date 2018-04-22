@@ -16,10 +16,11 @@ import org.apache.log4j.Logger;
 
 import com.bdindex.model.Model;
 import com.selenium.Constant;
+import com.selenium.Constant.ExecutionMode;
 
 public class Util {
 
-	//将起始日期以该值所代表的月为单位划分为多个时间段,比如起始日期是2010年1月，截止日期时2015年1月，该值如果是12，则划分为五个时间段，每个时间段12个月
+	//将起始日期以该值所代表的月为单位划分为多个时间段，该值是每个时间段之间相差的月份
 	private static int dateSplitStepInAccurateMode = 5;
 	private static int dateSplitStepInEstimatedMode = 1;
 
@@ -212,13 +213,14 @@ public class Util {
 		Calendar calendar1 = Calendar.getInstance();
 		calendar1.clear();
 
-		calendar1.set(2011, 1, 1);
+		calendar1.set(2011, 2, 3);//month设置略有不同，9代表10月
 		Date date1 = calendar1.getTime();
 
 		Calendar calendar2 = Calendar.getInstance();
-		calendar2.set(2011, 1, 1);
+		calendar2.set(2012, 11, 13);//12月
 		Date date2 = calendar2.getTime();
-
-		getDatePairsBetweenDates(date1, date2);
+		Constant.currentMode = ExecutionMode.Accurate;
+		ArrayList<Date[]> list = getDatePairsBetweenDates(date1, date2);
+		System.out.println(list);
 	}
 }

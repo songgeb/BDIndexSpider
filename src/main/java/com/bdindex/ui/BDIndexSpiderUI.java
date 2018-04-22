@@ -120,7 +120,7 @@ public class BDIndexSpiderUI {
 					} catch (DocumentFormatException e2) {
 						JOptionPane.showMessageDialog(frame,
 								"第 " + e2.getMessage()
-										+ " 行日期格式有问题.\n正确格式:1990-01-01");
+										+ " 行日期格式有问题.\n正确格式:1990/01/01");
 						return;
 					} catch (ModelDateException e2) {
 						JOptionPane.showMessageDialog(frame, e2.getMessage());

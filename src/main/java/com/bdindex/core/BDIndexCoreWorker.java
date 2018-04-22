@@ -107,8 +107,7 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 		//分割时间
 		ArrayList<Date[]> list = Util.getDatePairsBetweenDates(model.getStartDate(),
 				model.getEndDate());
-		String outputDir = BDIndexUtil
-				.getOutputDir(model.getKeyword(), model.getStartDate(), model.getEndDate());
+		String outputDir = BDIndexUtil.getOutputDir(model);
 		//输入关键词
 		submitKeyword(model.getKeyword());
 		Wait.waitForLoad(webdriver);
@@ -287,9 +286,7 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 				BDIndexSummaryUtil.summary(model);
 			}
 			// 记录爬虫信息
-			String spiderInfoFilePath = BDIndexUtil.getOutputDir(
-					model.getKeyword(), model.getStartDate(),
-					model.getEndDate())
+			String spiderInfoFilePath = BDIndexUtil.getOutputDir(model)
 					+ Constant.spiderinfoFilename;
 			Util.writeSpiderInfoToFile(spiderInfoFilePath, model);
 		}

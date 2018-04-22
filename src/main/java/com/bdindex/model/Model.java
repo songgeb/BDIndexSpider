@@ -1,6 +1,5 @@
 package com.bdindex.model;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -17,9 +16,6 @@ public class Model {
 	//以下属性来自程序运行过程，不来自txt输入文件
 	protected long time;
 	protected String status;
-
-	private static SimpleDateFormat dateFormat = new SimpleDateFormat(
-			"yyyy/MM/dd");
 
 	public long getTime() {
 		return time;
@@ -60,22 +56,14 @@ public class Model {
 	}
 
 	public void setEndDate(Date endDate) {
-		// this.endDate = endDate;
-		Date date = endDate;
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		int days = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-		calendar.add(Calendar.DAY_OF_MONTH, days - 1);
-		date = calendar.getTime();
-		this.endDate = date;
-
+		 this.endDate = endDate;
 	}
 
 	/*
 	 * 错误日期检查 
 	 * 日期大于当前日期返回1
 	 * startDate 大于endDate 返回2
-	 * 
+	 * 如果结束日期大于昨天返回3
 	 */
 	public int checkDate() {
 		Date currentDate = new Date();
@@ -86,6 +74,20 @@ public class Model {
 		if(startDate.getTime() > endDate.getTime()) {
 			return 2;
 		}
+		//结束日期不能是当前日期的前一天--这是百度指数的约束
+		Calendar cal = Calendar.getInstance();
+		cal.clear();
+		cal.setTime(currentDate);
+		cal.add(Calendar.DAY_OF_MONTH, -1);//当前日期前一天
+		Calendar yesterday = Calendar.getInstance();
+		yesterday.clear();
+		yesterday.set(Calendar.YEAR, cal.get(Calendar.YEAR));
+		yesterday.set(Calendar.MONTH, cal.get(Calendar.MONTH));
+		yesterday.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH));
+		if (endDate.getTime() > yesterday.getTime().getTime()) {
+			return 3;
+		}
+		
 		return 0;
 	}
 
@@ -94,8 +96,8 @@ public class Model {
 			return "initialisation not finished!";
 		}
 		return "[keyword =" + keyword + "," + "startDate="
-				+ dateFormat.format(startDate) + "," + "endDate="
-				+ dateFormat.format(endDate) + "," + "time=" + time + ","
+				+ startDate + "," + "endDate="
+				+ endDate + "," + "time=" + time + ","
 				+ "status=" + status + "]" + "\n";
 	}
 

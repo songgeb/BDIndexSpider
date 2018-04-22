@@ -167,21 +167,22 @@ public class BDIndexUtil {
 	 * @param keyword
 	 * @return
 	 */
-	public static String getOutputDir(String keyword, Date startDate,
-			Date endDate) {
+	public static String getOutputDir(Model model) {
 		return Constant.getCurrentOutputDir()
-				+ getOutputDirname(keyword, startDate, endDate) + "/";
+				+ getOutputDirname(model) + "/";
 	}
 
-	public static String getOutputDirname(String keyword, Date startDate,
-			Date endDate) {
-		return keyword + "(" + dateFormat.format(startDate) + "-"
-				+ dateFormat.format(endDate) + ")";
+	public static String getOutputDirname(Model model) {
+		String area = model.getCity() == null ? (model.getProvince() == null ? "全国" : model.getProvince()) : model.getCity();
+		if (area.length() > 0) {
+			area = "-"+area+"-";
+		}
+		return model.getKeyword() + area + "(" + dateFormat.format(model.getStartDate()) + "-"
+				+ dateFormat.format(model.getEndDate()) + ")";
 	}
 
-	public static String getBDIndexDataFilePath(String keyword, Date startDate,
-			Date endDate) {
-		String outputDir = getOutputDir(keyword, startDate, endDate);
+	public static String getBDIndexDataFilePath(Model model) {
+		String outputDir = getOutputDir(model);
 		return outputDir + new File(outputDir).getName() + ".txt";
 	}
 	
@@ -478,7 +479,7 @@ public class BDIndexUtil {
 	 */
 	public static void deleteIndexFile(Model model) {
 		String filePath = BDIndexUtil.getBDIndexDataFilePath(
-				model.getKeyword(), model.getStartDate(), model.getEndDate());
+				model);
 		File file = new File(filePath);
 		if (file.exists() && file.isFile()) {
 			file.delete();

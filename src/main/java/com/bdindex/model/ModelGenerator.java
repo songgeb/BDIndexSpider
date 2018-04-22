@@ -2,9 +2,10 @@ package com.bdindex.model;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.text.ParsePosition;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -47,10 +48,7 @@ public class ModelGenerator {
 	 * 封装一个日期样式枚举
 	 */
 	public enum DateStyle {
-		YYYY_MM_dd("yyyy-MM-dd", false), 
-		YYYYpMMpdd("yyyy/MM/dd", false), 
-		YYYY_MM("yyyy-MM", false), 
-		YYYYpMM("yyyy/MM", false);
+		YYYYpMM("yyyy/MM/dd", false);//关键字文件支持的日期格式
 		private String value;
 
 		public String value() {
@@ -76,25 +74,17 @@ public class ModelGenerator {
 		private java.util.Date transDate(String date) throws ModelDateException {
 			// assert date is not null
 			
-			java.util.Date dateTmp = null;
+			Date dateTmp = null;
 			for (DateStyle style : DateStyle.values()) {
-				ParsePosition pos = new ParsePosition(0);// 从第一个字符开始解析
-				// 去除日期中的日
-//				String newDate = date.substring(0, date.lastIndexOf("/"));
-				int offset = 0;
-				for(int i = date.length() - 1; i >= 0; i-- ) {
-					if(!Character.isDigit(date.charAt(i))) {
-						offset = i;
-						break;
-					}
-				}
-				dateTmp = getDateFormat(style.value()).parse(date, pos);
-				if (pos.getIndex() == offset) {
-					return dateTmp;
+				try {
+					dateTmp = getDateFormat(style.value()).parse(date);
+				} catch (ParseException e) {
+					// 没找到已有的DateStyle
+					e.printStackTrace();
+					throw new ModelDateException();
 				}
 			}
-			// 没找到已有的DateStyle
-			throw new ModelDateException();
+			return dateTmp;
 		}
 
 		/**
@@ -143,6 +133,8 @@ public class ModelGenerator {
 				} else if (model.checkDate() == 2) {
 					throw new ModelDateException("第" + String.valueOf(count)
 							+ " 行结束日期不能小于开始日期");
+				} else if (model.checkDate() == 3) {
+					throw new ModelDateException("结束日期最大不能超过昨天!");
 				}
 			} catch (IllegalAccessException | InvocationTargetException e) {
 				e.printStackTrace();

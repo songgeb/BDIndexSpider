@@ -128,7 +128,7 @@ public class BDIndexSummaryUtil {
 	}
 	
 	private static int picCountInAccurateMode(Model model) {
-		File dir = new File(BDIndexUtil.getOutputDir(model.getKeyword(), model.getStartDate(), model.getEndDate()));
+		File dir = new File(BDIndexUtil.getOutputDir(model));
 		int picCount = 0;
 		for (File  subFile : dir.listFiles()) {
 			if (subFile.getName().endsWith(".png")) picCount++;
