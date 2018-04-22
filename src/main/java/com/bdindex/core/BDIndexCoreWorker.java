@@ -1,5 +1,6 @@
 package com.bdindex.core;
 
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -113,7 +114,11 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 		Wait.waitForLoad(webdriver);
 		//设置地区
 		String url = webdriver.getCurrentUrl();
-		webdriver.get(url+"&area="+cityID);
+		//当前该逻辑用不到，因为每次输入关键词时，url都会将area信息清掉
+		if (url.contains("&area=")) {
+			url = url.replaceAll("&area=\\d+", "");//删除已有的area
+		}
+		webdriver.get(url+"&area="+cityID);//添加新的
 		Wait.waitForLoad(webdriver);
 		
 		url = webdriver.getCurrentUrl();
