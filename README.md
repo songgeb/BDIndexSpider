@@ -51,7 +51,7 @@
 微信
 
 <div align=center>
-<span>
+
 ![](https://songgeb.github.io/images/alipay.jpg)
 <br>
 支付宝
