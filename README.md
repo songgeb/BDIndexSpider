@@ -44,14 +44,13 @@
 ### 打赏
 
 <div align=center>
+<div style="display:inline-block;">
+<img src="https://songgeb.github.io/images/wechat.jpg">
+<p>微信</p>
+</div>
 
-
-![](https://songgeb.github.io/images/wechat.jpg)
-<br>
-微信
-
-<div align=center>
-
-![](https://songgeb.github.io/images/alipay.jpg)
-<br>
-支付宝
+<div style="display:inline-block;">
+<img src="https://songgeb.github.io/images/alipay.jpg">
+    <p>支付宝</p>
+</div>
+</div>
