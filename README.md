@@ -22,6 +22,10 @@
 - 如果不想运行源码，可以到**executable**目录下直接下载可执行`jar`文件
 - 关于抓取频率限制问题可以看[这里](https://github.com/songgeb/BDIndexSpider/issues/2)
 
+### 问题反馈
+
+关于工具的问题反馈和建议，推荐大家在github上开[issue](https://github.com/songgeb/BDIndexSpider/issues)进行详细说明
+
 ### ChangeLog
 
 - 2018年04月22日
