@@ -100,7 +100,7 @@ public class BDIndexAction {
 			webdriver.get(Constant.url);
 			Wait.waitForLoad(webdriver);
 		}
-		Wait.waitForElementClickable(webdriver, BDIndexBy.searchTextField, 20);
+		Wait.waitForElementVisible(webdriver, BDIndexBy.searchTextField, 20);
 		webdriver.findElement(BDIndexBy.searchTextField).clear();
 		webdriver.findElement(BDIndexBy.searchTextField).sendKeys(keyword);
 		webdriver.findElement(BDIndexBy.searchTextField).submit();
@@ -120,8 +120,8 @@ public class BDIndexAction {
 		Exception e = null;
 		while (retryCount > 0) {
 			try {
-				Wait.waitForElementVisible(webdriver, By.linkText("登录"), 8);
-				webdriver.findElement(By.linkText("登录")).click();
+				Wait.waitForElementVisible(webdriver, BDIndexBy.loginBtn, 8);
+				webdriver.findElement(BDIndexBy.loginBtn).click();
 				// 输入用户名密码
 				Wait.waitForElementVisible(webdriver, BDIndexBy.username, 3);
 				webdriver.findElement(BDIndexBy.username).sendKeys(username);
@@ -136,7 +136,6 @@ public class BDIndexAction {
 				Wait.waitForLoginDialogDispose(webdriver);
 				break;
 			} catch (VerifyCodeException e3) {
-//				BDIndexUtil.closeSession(webdriver, service);
 				logger.warn("需要输入验证码");
 				try {
 					Wait.waitForLoginDialogDispose(webdriver);

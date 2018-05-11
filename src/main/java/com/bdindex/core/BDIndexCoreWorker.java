@@ -1,6 +1,6 @@
 package com.bdindex.core;
 
-import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -109,16 +109,17 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 		ArrayList<Date[]> list = Util.getDatePairsBetweenDates(model.getStartDate(),
 				model.getEndDate());
 		String outputDir = BDIndexUtil.getOutputDir(model);
-		//输入关键词
-		submitKeyword(model.getKeyword());
-		Wait.waitForLoad(webdriver);
 		//设置地区
 		String url = webdriver.getCurrentUrl();
-		//当前该逻辑用不到，因为每次输入关键词时，url都会将area信息清掉
 		if (url.contains("&area=")) {
 			url = url.replaceAll("&area=\\d+", "");//删除已有的area
 		}
-		webdriver.get(url+"&area="+cityID);//添加新的
+		if (url.contains("&word=")) {
+			url = url.replaceAll("&word=[\\w,%]+", "");//删除word参数, 即查询关键词
+		}
+		url += "&area=" + cityID;
+		url += "&word=" + URLEncoder.encode(model.getKeyword(), "GBK");
+		webdriver.get(url);
 		Wait.waitForLoad(webdriver);
 		
 		url = webdriver.getCurrentUrl();
@@ -206,6 +207,9 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 		// 初始化
 		try {
 			init();
+			//输入关键词
+			submitKeyword("nba");
+			Wait.waitForLoad(webdriver);
 		} catch (Exception e) {
 			publish(new UIUpdateModel(getTextAreaContent(null,
 					Constant.Status.Spider_InitException), true));
@@ -213,6 +217,7 @@ public class BDIndexCoreWorker extends SwingWorker<Void, UIUpdateModel> {
 			BDIndexUtil.closeSession(webdriver, service);
 			return;
 		}
+		
 		//获取城市信息
 		Wait.waitForLoad(webdriver);
 		@SuppressWarnings("unchecked")

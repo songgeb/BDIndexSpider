@@ -6,11 +6,11 @@ public class BDIndexBy {
 	
 	private BDIndexBy(){}
 
-	private static String idOfLoginDialog = "TANGRAM_6__";
-	private static String idOfUsernameTag = "TANGRAM_12__userName";
-	private static String idOfPasswordTag = "TANGRAM_12__password";
-	private static String idOfVerifyCodeTag = "TANGRAM_12__verifyCode";
-	private static String idOfSearchTextField = "schword";
+	private static String idOfLoginDialog = "index-login-block";
+	private static String idOfUsernameTag = "TANGRAM__PSP_4__userName";
+	private static String idOfPasswordTag = "TANGRAM__PSP_4__password";
+	private static String idOfVerifyCodeTag = "TANGRAM__PSP_4__verifyCode";
+	private static String xpathOfSearchTextField = "//*[@id=\"search-input-form\"]/input[3]";
 	private static String idOfBDIndexBlackBox = "viewbox";//整个黑框,包括日期、关键字和指数
 	private static String xpathOfBDIndexRect = "//div[@id='trend']/*[name()='svg']/*[name()='rect'][2]";
 	private static String xpathOfBDIndexSvg = "//div[@id='trend']/*[name()='svg']";
@@ -29,11 +29,12 @@ public class BDIndexBy {
 	private static String xpathOfCurrentTime = "//*[@id='viewbox']/div[1]/div[1]";
 	
 	//登录部分
+	public static By loginBtn = By.xpath("//*[@id=\"home\"]/div[1]/div[2]/div[1]/div[4]");
 	public static By loginDialog = By.id(idOfLoginDialog);
 	public static By username = By.id(idOfUsernameTag);
 	public static By password = By.id(idOfPasswordTag);
 	public static By verifycode = By.id(idOfVerifyCodeTag);
-	public static By searchTextField = By.id(idOfSearchTextField);
+	public static By searchTextField = By.xpath(xpathOfSearchTextField);
 	
 	//数据区域
 	public static By bdIndexSvg = By.xpath(xpathOfBDIndexSvg);
