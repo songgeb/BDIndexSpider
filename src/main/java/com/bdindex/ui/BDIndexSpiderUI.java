@@ -217,33 +217,6 @@ public class BDIndexSpiderUI {
 		scrollPane_1.setBounds(10, 264, 601, 137);
 		frame.getContentPane().add(scrollPane_1);
 
-		final JRadioButton radioButton = new JRadioButton("曲线推算");
-		radioButton.setActionCommand("estimate");
-		radioButton.setBounds(6, 13, 84, 23);
-		radioButton.setEnabled(false);
-		panel.add(radioButton);
-
-		final JRadioButton radioButton_1 = new JRadioButton("精确抓取");
-		radioButton_1.setActionCommand("accurate");
-		radioButton_1.setSelected(true);
-		radioButton_1.setBounds(104, 13, 84, 23);
-		panel.add(radioButton_1);
-
-		ActionListener radioBtnListener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (e.getActionCommand().equals("estimate")) {
-				} else if (e.getActionCommand().equals("accurate")) {
-				}
-			}
-		};
-		radioButton.addActionListener(radioBtnListener);
-		radioButton_1.addActionListener(radioBtnListener);
-
-		final ButtonGroup group = new ButtonGroup();
-		group.add(radioButton);
-		group.add(radioButton_1);
-
 		final JButton button_1 = new JButton("启动");
 		button_1.addMouseListener(new MouseAdapter() {
 			@Override
@@ -257,19 +230,11 @@ public class BDIndexSpiderUI {
 				}
 
 				// 启动爬虫
-				String selectedActionCommand = group.getSelection()
-						.getActionCommand();
 				ArrayList<AbstractButton> buttons = new ArrayList<>();
 				buttons.add(button_1);
-				buttons.add(radioButton_1);
-				buttons.add(radioButton);
 
 				textArea.setText("");
-				if (selectedActionCommand.equals("estimate")) {
-					Constant.currentMode = ExecutionMode.Estimate;
-				} else if (selectedActionCommand.equals("accurate")) {
-					Constant.currentMode = ExecutionMode.Accurate;
-				}
+				Constant.currentMode = ExecutionMode.Accurate;
 				new BDIndexCoreWorker((MyTableModel) table_1.getModel(),
 						buttons, textArea).execute();
 			}
