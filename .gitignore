@@ -1,7 +1,6 @@
 .DS_Store
 /captures/
 /logs/
-/accuratePics/
-/estimatedPics/
+/accurateData/
 /bin/
 /target/

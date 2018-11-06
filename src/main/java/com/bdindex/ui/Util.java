@@ -21,7 +21,7 @@ import com.selenium.Constant.ExecutionMode;
 public class Util {
 
 	//将起始日期以该值所代表的月为单位划分为多个时间段，该值是每个时间段之间相差的月份
-	private static int dateSplitStepInAccurateMode = 5;
+	private static int dateSplitStepInAccurateMode = 6;
 	private static int dateSplitStepInEstimatedMode = 1;
 
 	private static Logger logger = Logger.getLogger(Util.class);
@@ -149,6 +149,33 @@ public class Util {
 			datePairs.add(datePair);
 		}
 		return datePairs;
+	}
+	
+	public static void writeToFile(String filePath, String content, Boolean append) {
+		if (filePath == null) {
+			return;
+		}
+		File file = new File(filePath);
+		if (!file.getParentFile().exists()) {
+			file.getParentFile().mkdirs();
+		}
+		
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(file, append));
+			writer.write(content);
+			writer.flush();
+			writer.close();
+		} catch (Exception e) {
+			logger.error("写入目的文件数据错误!", e);
+		}
 	}
 
 	/**

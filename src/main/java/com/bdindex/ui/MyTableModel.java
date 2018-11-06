@@ -12,7 +12,7 @@ public class MyTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	
-	private String[] names = {"关键词", "起始日期" ,"结束日期", "状态", "省份", "城市", "用时(秒)"};
+	private String[] names = {"关键词", "起始日期" ,"结束日期", "状态", "省份", "城市", "用时(毫秒)"};
 	private ArrayList<Model> values = new ArrayList<Model>();
 
 	public void setValues(ArrayList<Model> values) {

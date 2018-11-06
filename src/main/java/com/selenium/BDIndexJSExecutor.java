@@ -25,6 +25,19 @@ public class BDIndexJSExecutor {
 		.executeScript(jsCode);
 	}
 	
+	public static String decrypt(WebDriver webdriver, String aData, String tData) {
+		Object result = ((JavascriptExecutor)webdriver).executeScript(
+				"var e = '" + aData + "';" + "var t = '" + tData + "';"
+				+ "for (var a = t.split(\"\"), i = e.split(\"\"), n = {}, s = [], o = 0; o < a.length / 2; o++) {"
+				+ "    n[a[o]] = a[a.length / 2 + o];"
+				+ "}"
+				+ "for (var r = 0; r < e.length; r++) {" 
+				+ "    s.push(n[i[r]]);"
+				+ "}"
+				+ "return s.join(\"\")");
+		return (String)result;
+	}
+	
 	/**
 	 * 请求百度指数图片
 	 * @throws IndexImgRequestFailException 
@@ -63,6 +76,63 @@ public class BDIndexJSExecutor {
 			throw new IndexImgRequestFailException();
 		}
 	}
+	
+	//同步方法
+	public static String requestTrendIndex(WebDriver webdriver,String keyword, String area, Date startDate, Date endDate) {
+			String urlString = "http://index.baidu.com/api/SearchApi/index?";
+			urlString += "startDate=" + allIndexDateFormator.format(startDate);
+			urlString += "&endDate=" + allIndexDateFormator.format(endDate);
+			urlString += "&word="+keyword;
+			urlString += "&area="+area;
+			webdriver.manage().timeouts().setScriptTimeout(8, TimeUnit.SECONDS);
+			Object response = ((JavascriptExecutor) webdriver).executeAsyncScript(
+					"var callback = arguments[arguments.length - 1];" +
+					"var xhr = new XMLHttpRequest();" +
+					"xhr.open('GET', '"+urlString+"', true);" +
+					"xhr.timeout = 6000;" +
+					"xhr.onload = function() {" +
+					"  if (xhr.status == 200) {" +
+					"var json = JSON.parse(this.responseText);"+
+					"    	callback(json.data.userIndexes[0].all.data+'*sb*'+json.data.uniqid);" +
+					"  	} else {" +
+					"		callback('false');" +
+					"	}" +
+					"};" +
+					"xhr.ontimeout = function() {"+ 
+					"	callback('false')" +
+					"};" +
+					"xhr.send(null);", "function (args){ return args; }"
+					);
+			return (String)response;
+	}
+	
+	public static String requestPtbk(WebDriver webdriver, String uniqid) {
+		String urlString = "http://index.baidu.com/Interface/api/ptbk?";
+		
+		urlString += "uniqid="+uniqid;
+		webdriver.manage().timeouts().setScriptTimeout(8, TimeUnit.SECONDS);
+		Object response = ((JavascriptExecutor) webdriver).executeAsyncScript(
+				"var callback = arguments[arguments.length - 1];" +
+				"var xhr = new XMLHttpRequest();" +
+				"xhr.open('GET', '"+urlString+"', true);" +
+				"xhr.timeout = 6000;" +
+				"xhr.onload = function() {" +
+				"  if (xhr.status == 200) {" +
+				"var json = JSON.parse(this.responseText);"+
+				"console.warn(json);"+
+				"    	callback(json.data);" +
+				"  	} else {" +
+				"		callback('false');" +
+				"	}" +
+				"};" +
+				"xhr.ontimeout = function() {"+ 
+				"	callback('false')" +
+				"};" +
+				"xhr.send(null);", "function (args){ return args; }"
+				);
+		return (String)response;
+}
+	
 	//同步方法
 	public static String[] requestWiseIndex(WebDriver webdriver,String keyword, String res, String res2, Date startDate, Date endDate) {
 		String urlString = "http://index.baidu.com/Interface/Search/getSubIndex/";

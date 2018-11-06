@@ -167,23 +167,18 @@ public class BDIndexUtil {
 	 * @param keyword
 	 * @return
 	 */
-	public static String getOutputDir(Model model) {
+	public static String getOutputFilePath(Model model) {
 		return Constant.getCurrentOutputDir()
-				+ getOutputDirname(model) + "/";
+				+ getOutputFileName(model) + ".txt";
 	}
 
-	public static String getOutputDirname(Model model) {
+	private static String getOutputFileName(Model model) {
 		String area = model.getCity() == null ? (model.getProvince() == null ? "全国" : model.getProvince()) : model.getCity();
 		if (area.length() > 0) {
 			area = "-"+area+"-";
 		}
 		return model.getKeyword() + area + "(" + dateFormat.format(model.getStartDate()) + "-"
 				+ dateFormat.format(model.getEndDate()) + ")";
-	}
-
-	public static String getBDIndexDataFilePath(Model model) {
-		String outputDir = getOutputDir(model);
-		return outputDir + new File(outputDir).getName() + ".txt";
 	}
 	
 	public static int differentDays(Date date1,Date date2)
@@ -469,20 +464,6 @@ public class BDIndexUtil {
 		if (retryCount == 0) {
 			logger.error(getCurrenKeyword() + " : 找不到黑框区域,重试失败", e);
 			throw e;
-		}
-	}
-
-	/**
-	 * 当抓取发生异常时，删除未完整抓取的指数文件
-	 * 
-	 * @param model
-	 */
-	public static void deleteIndexFile(Model model) {
-		String filePath = BDIndexUtil.getBDIndexDataFilePath(
-				model);
-		File file = new File(filePath);
-		if (file.exists() && file.isFile()) {
-			file.delete();
 		}
 	}
 

@@ -4,7 +4,6 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.AbstractButton;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -35,10 +34,6 @@ import javax.swing.JTable;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
-import javax.swing.JRadioButton;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class BDIndexSpiderUI {
 
@@ -183,8 +178,7 @@ public class BDIndexSpiderUI {
 			public void mousePressed(MouseEvent e) {
 				JOptionPane.showMessageDialog(frame,
 						"启动爬虫后会在jar文件相同目录下产生几个文件夹.\n"
-								+ "estimatedPics目录: 用于存放推算模式下的抓取数据.\n"
-								+ "accuratePics目录: 用于存放精确模式下的抓取数据.\n"
+								+ "accurateData目录: 用于存放精确模式下的抓取数据.\n"
 								+ "        logs目录: 用于记录软件运行日志.\n"
 								+ "    drivers目录: 用于存放软件运行必要的驱动文件.\n");
 			}

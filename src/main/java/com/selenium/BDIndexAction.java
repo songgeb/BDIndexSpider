@@ -234,6 +234,7 @@ public class BDIndexAction {
 		System.setProperty("webdriver.chrome.driver", "drivers/chromedriver_mac");
 		WebDriver chromeDriver = new ChromeDriver();
 		chromeDriver.get("https://www.baidu.com");
+		chromeDriver.quit();
 //		String filePath = Constant.logOutputDir + BDIndexUtil.getCurrenKeyword() + "(2222)"+".png";
 //		ScreenShot.captureScreen((TakesScreenshot)chromeDriver, filePath);
 	}

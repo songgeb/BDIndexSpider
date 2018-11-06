@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.BDIndexSpider</groupId>
 	<artifactId>BDIndexSpider</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<packaging>jar</packaging>
 
 	<name>BDIndexSpider</name>
@@ -46,8 +46,15 @@
 		<dependency>
         	<groupId>org.seleniumhq.selenium</groupId>
         	<artifactId>selenium-java</artifactId>
-        	<version>3.11.0</version>
+        	<version>3.14.0</version>
     	</dependency>  
+    	
+    	<!-- https://mvnrepository.com/artifact/org.json/json -->
+		<dependency>
+    		<groupId>org.json</groupId>
+    		<artifactId>json</artifactId>
+    		<version>20180813</version>
+		</dependency>
      
 		<!-- http://mvnrepository.com/artifact/net.sourceforge.tess4j/tess4j -->
 		<!-- Apache Commons csv -->
@@ -88,8 +95,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.5.1</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 
