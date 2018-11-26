@@ -29,7 +29,7 @@ public class BDIndexBy {
 	private static String xpathOfCurrentTime = "//*[@id='viewbox']/div[1]/div[1]";
 	
 	//登录部分
-	public static By loginBtn = By.xpath("//*[@id=\"home\"]/div[1]/div[2]/div[1]/div[4]");
+	public static By loginBtn = By.xpath("//*[@id=\"home\"]/div[1]/div[2]/div[1]/div[5]/span/span");
 	public static By loginDialog = By.id(idOfLoginDialog);
 	public static By username = By.id(idOfUsernameTag);
 	public static By password = By.id(idOfPasswordTag);

@@ -125,8 +125,10 @@ public class BDIndexAction {
 				// 输入用户名密码
 				Wait.waitForElementVisible(webdriver, BDIndexBy.username, 3);
 				webdriver.findElement(BDIndexBy.username).sendKeys(username);
+				Thread.sleep(2000);
 				webdriver.findElement(BDIndexBy.password).sendKeys(password);
 				// 登录
+				Thread.sleep(1000);//等待1秒再登录，避免间隔时间过短
 				webdriver.findElement(BDIndexBy.username).submit();
 				// 判断是否需要输入验证码
 				WebElement verifyCodeElement = webdriver.findElement(BDIndexBy.verifycode);
