@@ -20,14 +20,14 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>${junitVersion}</version>
+			<version>4.13.1</version>
 		</dependency>
 
 		<!-- apache common BeanUtils -->
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
-			<version>1.9.2</version>
+			<version>1.11.0</version>
 		</dependency>
 		<!-- log4j -->
 		<dependency>
@@ -39,21 +39,21 @@
 		<dependency>  
     		<groupId>org.slf4j</groupId>  
     		<artifactId>slf4j-log4j12</artifactId>  
-		    <version>1.7.2</version>  
+		    <version>1.7.34</version>  
 		</dependency> 
 
 		<!-- http://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
 		<dependency>
         	<groupId>org.seleniumhq.selenium</groupId>
         	<artifactId>selenium-java</artifactId>
-        	<version>3.14.0</version>
+        	<version>3.141.0</version>
     	</dependency>  
     	
     	<!-- https://mvnrepository.com/artifact/org.json/json -->
 		<dependency>
     		<groupId>org.json</groupId>
     		<artifactId>json</artifactId>
-    		<version>20180813</version>
+    		<version>20231013</version>
 		</dependency>
      
 		<!-- http://mvnrepository.com/artifact/net.sourceforge.tess4j/tess4j -->
@@ -67,7 +67,7 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.4</version>
+			<version>2.14.0</version>
 		</dependency>
 	</dependencies>
 
